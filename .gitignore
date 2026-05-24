@@ -1,0 +1,27 @@
+# IntelliJ
+.idea/
+*.iml
+
+# Gradle
+.gradle/
+build/
+**/build/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+
+# Secret config
+application-local.yml
+application-prod.yml
+application-secret.yml
+application-*.secret.yml
+
+# Generated
+out/
