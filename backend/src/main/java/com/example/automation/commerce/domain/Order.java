@@ -25,6 +25,16 @@ public class Order extends BaseEntity {
     @OneToMany(mappedBy = "order", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    @OneToOne(mappedBy = "order", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Payment payment;
+
+    /**
+     * 연관관계 편의 메서드
+     **/
+    public void assignPayment(Payment payment) {
+        this.payment = payment;
+    }
+
     public void addOrderItem(OrderItem orderItem) {
         this.orderItems.add(orderItem);
         orderItem.assignOrder(this);
@@ -65,6 +75,12 @@ public class Order extends BaseEntity {
         //배송완료 후 취소불가 추후 추가 (배송상태 필드 추가시)
         //결제 완료 상태 정책 추후 추가 (결제 상태 필드 추가시)
         //환불 상태 추후 추가 (환불 상태 추후 추가시?)
+    }
+
+    public int calculateTotalPrice() {
+        return orderItems.stream()
+                .mapToInt(OrderItem::calculateTotalPrice)
+                .sum();
     }
 
     // TODO: 2026-05-14

@@ -40,4 +40,8 @@ public class OrderItem {
     public static OrderItem create(Product product, String orderProductName, int orderPrice, int quantity) {
         return new OrderItem(product, orderProductName, orderPrice, quantity);
     }
+
+    public int calculateTotalPrice() {
+        return orderPrice * quantity;
+    }
 }
