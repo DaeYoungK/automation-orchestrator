@@ -35,35 +35,37 @@ public class Payment extends BaseEntity {
         this.paymentStatus = PaymentStatus.PENDING;
     }
 
-    public void assignOrder(Order order) {
+    public void mapOrder(Order order) {
         order.assignPayment(this);
     }
 
     public static Payment create(Order order) {
         Payment payment = new Payment(order);
-        payment.assignOrder(order);
+        payment.mapOrder(order);
 
         return payment;
     }
 
     public void success() {
-        if (this.paymentStatus == PaymentStatus.PENDING) {
-            this.paymentStatus = PaymentStatus.SUCCESS;
-        }
+        validatePending();
+        this.paymentStatus = PaymentStatus.SUCCESS;
         this.paidAt = LocalDateTime.now();
     }
 
     public void cancel() {
-        if (this.paymentStatus != PaymentStatus.SUCCESS) {
-            this.paymentStatus = PaymentStatus.CANCELED;
-        }
+        validatePending();
+        this.paymentStatus = PaymentStatus.CANCELED;
     }
 
     public void fail(String reason) {
-        if (this.paymentStatus == PaymentStatus.PENDING) {
-            this.paymentStatus = PaymentStatus.FAILED;
-            this.failedReason = reason;
-        }
+        validatePending();
+        this.paymentStatus = PaymentStatus.FAILED;
+        this.failedReason = reason;
     }
 
+    private void validatePending() {
+        if (this.paymentStatus != PaymentStatus.PENDING) {
+            throw new IllegalArgumentException("결제 대기 상태에서만 처리할 수 있습니다.");
+        }
+    }
 }

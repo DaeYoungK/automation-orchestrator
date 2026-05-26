@@ -76,4 +76,32 @@ class PaymentTest {
         assertThat(payment.getPaymentStatus()).isEqualTo(PaymentStatus.CANCELED);
     }
 
+    @Test
+    void SUCCESS_상태에서는_fail_할_수_없다() throws Exception {
+        //given
+        Payment payment = Payment.create(order);
+        String failedReason = "결제실패!";
+
+        //when
+        payment.success();
+
+        //then
+        assertThatThrownBy(() -> payment.fail(failedReason))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("결제 대기 상태에서만 처리할 수 있습니다.");
+    }
+
+    @Test
+    void SUCCESS_상태에서는_cancel_할_수_없다() throws Exception {
+        //given
+        Payment payment = Payment.create(order);
+
+        //when
+        payment.success();
+
+        //then
+        assertThatThrownBy(() -> payment.cancel())
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("결제 대기 상태에서만 처리할 수 있습니다.");
+    }
 }
