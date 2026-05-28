@@ -25,6 +25,16 @@ public class Order extends BaseEntity {
     @OneToMany(mappedBy = "order", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    @OneToOne(mappedBy = "order", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Payment payment;
+
+    /**
+     * 연관관계 편의 메서드
+     **/
+    public void assignPayment(Payment payment) {
+        this.payment = payment;
+    }
+
     public void addOrderItem(OrderItem orderItem) {
         this.orderItems.add(orderItem);
         orderItem.assignOrder(this);
@@ -67,8 +77,34 @@ public class Order extends BaseEntity {
         //환불 상태 추후 추가 (환불 상태 추후 추가시?)
     }
 
-    // TODO: 2026-05-14
-    // pay() 상태
-    // complete() 상태
+    public int calculateTotalPrice() {
+        return orderItems.stream()
+                .mapToInt(OrderItem::calculateTotalPrice)
+                .sum();
+    }
+
+
+    public void pay() {
+        validatePayable();
+        this.orderStatus = OrderStatus.PAID;
+    }
+
+    private void validatePayable() {
+        if (this.orderStatus != OrderStatus.CREATED) {
+            throw new IllegalArgumentException("주문 생성 상태에서만 결제할 수 있습니다.");
+        }
+    }
+
+    public void complete() {
+        validatePaid();
+        this.orderStatus = OrderStatus.COMPLETED;
+    }
+
+    private void validatePaid() {
+        if (this.orderStatus != OrderStatus.PAID) {
+            throw new IllegalArgumentException("결제 완료 상태에서만 처리할 수 있습니다.");
+        }
+    }
+
 
 }
