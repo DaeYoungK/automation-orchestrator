@@ -83,8 +83,28 @@ public class Order extends BaseEntity {
                 .sum();
     }
 
-    // TODO: 2026-05-14
-    // pay() 상태
-    // complete() 상태
+
+    public void pay() {
+        validatePayable();
+        this.orderStatus = OrderStatus.PAID;
+    }
+
+    private void validatePayable() {
+        if (this.orderStatus != OrderStatus.CREATED) {
+            throw new IllegalArgumentException("주문 생성 상태에서만 결제할 수 있습니다.");
+        }
+    }
+
+    public void complete() {
+        validatePaid();
+        this.orderStatus = OrderStatus.COMPLETED;
+    }
+
+    private void validatePaid() {
+        if (this.orderStatus != OrderStatus.PAID) {
+            throw new IllegalArgumentException("결제 완료 상태에서만 처리할 수 있습니다.");
+        }
+    }
+
 
 }
