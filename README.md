@@ -38,3 +38,25 @@ This project uses AI as a development assistant for:
 - Refactoring guidance
 - Test case drafting
 - Documentation support
+
+## Architecture Principles
+
+- Domain-driven design (DDD)
+- Aggregate boundary separation
+- Service orchestration
+- Transactional consistency
+- Transaction boundary management
+- JPA for state management
+- Preparing MyBatis integration for future query optimization
+
+## Current Commerce Flow
+
+```text
+Product Creation
+→ Inventory Initialization
+→ Order Creation
+→ Inventory Reservation
+→ Payment Creation
+→ Payment Success
+→ Order Paid
+→ Inventory Decrease
