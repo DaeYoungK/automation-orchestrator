@@ -4,4 +4,17 @@
 
 <mapper namespace="com.example.automation.commerce.repository.OrderQueryMapper">
 
+    <select id="findOrderSummaries" resultType="com.example.automation.commerce.dto.OrderSummaryResponse">
+        SELECT
+               o.id AS orderId,
+               o.address AS address,
+               o.order_status AS orderStatus,
+               COALESCE (SUM(oi.order_price * oi.quantity), 0) AS totalPrice,
+               o.created_at AS createdAt
+        FROM orders AS o
+        INNER JOIN order_item AS oi
+            ON o.id = oi.order_id
+        GROUP BY o.id, o.address, o.order_status, o.created_at
+        ORDER BY o.created_at DESC
+    </select>
 </mapper>
