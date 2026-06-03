@@ -60,3 +60,16 @@ Product Creation
 → Payment Success
 → Order Paid
 → Inventory Decrease
+```
+
+## Current MyBatis Queries
+
+- Order Summary Query
+- Low Stock Product Query
+
+## Future Automation Flow
+
+Low Stock Product Query
+→ AI Analysis
+→ Task Creation
+→ Approval Workflow
