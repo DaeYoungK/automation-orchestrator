@@ -91,7 +91,7 @@ public class Execution extends BaseEntity {
     }
 
     public void cancel() {
-        if (this.executionStatus != ExecutionStatus.SUCCESS || this.executionStatus != ExecutionStatus.FAILED) {
+        if (this.executionStatus == ExecutionStatus.SUCCESS || this.executionStatus == ExecutionStatus.FAILED) {
             throw new IllegalArgumentException("작업을 취소할 수 없습니다.");
         }
         this.executionStatus = ExecutionStatus.CANCELED;
