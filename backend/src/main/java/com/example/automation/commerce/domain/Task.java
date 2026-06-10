@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Entity
 @Table(name = "task")
@@ -21,8 +24,19 @@ public class Task extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private TaskStatus taskStatus;
 
+    @OneToMany(mappedBy = "task",cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Execution> executions = new ArrayList<>();
+
     private String title;
     private String description;
+
+    /**
+     * 연관관계 편의 메서드
+     */
+    public void addExecution(Execution execution) {
+        this.executions.add(execution);
+        execution.assignTask(this);
+    }
 
     protected Task(TaskType taskType, String title, String description) {
         this.taskType = taskType;
