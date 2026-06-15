@@ -28,6 +28,7 @@ AI-assisted Spring Boot automation orchestration platform.
 - Payment
 - Task
 - Execution
+- ExecutionLog
 
 ## AI-assisted Development Workflow
 
@@ -73,3 +74,16 @@ Low Stock Product Query
 → AI Analysis
 → Task Creation
 → Approval Workflow
+
+## Automation Workflow
+
+Task
+→ Execution
+→ ExecutionLog
+
+Examples:
+
+- Low Stock Report
+- Purchase Review Request
+- Payment Failure Analysis
+- RPA Recovery Task

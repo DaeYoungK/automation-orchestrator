@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "execution")
 @NoArgsConstructor
@@ -25,6 +28,9 @@ public class Execution extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private ExecutionStatus executionStatus;
 
+    @OneToMany(mappedBy = "execution", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ExecutionLog> executionLogs = new ArrayList<>();
+
     private int attemptCount;
     private String errorMessage;
 
@@ -37,6 +43,11 @@ public class Execution extends BaseEntity {
      */
     public void assignTask(Task task) {
         this.task = task;
+    }
+
+    public void addLog(ExecutionLog executionLog) {
+        this.executionLogs.add(executionLog);
+        executionLog.assignExecution(this);
     }
 
     public static Execution create(ExecutionType executionType) {
