@@ -85,18 +85,19 @@ public class Execution extends BaseEntity {
         }
     }
 
-    public void retry() {
-        validateRetryable();
-        this.executionStatus = ExecutionStatus.READY;
-        this.attemptCount++;
-        this.errorMessage = null;
+    public static Execution retryFrom(Execution failedExecution) {
+        validateRetryable(failedExecution);
+        Execution execution = create(failedExecution.executionType);
+        execution.attemptCount = failedExecution.attemptCount + 1;
+
+        return execution;
     }
 
-    private void validateRetryable() {
-        if (this.executionStatus != ExecutionStatus.FAILED) {
+    private static void validateRetryable(Execution failedExecution) {
+        if (failedExecution.executionStatus != ExecutionStatus.FAILED) {
             throw new IllegalArgumentException("실패 상태에서만 재시도할 수 있습니다.");
         }
-        if (this.attemptCount >= 3) {
+        if (failedExecution.attemptCount >= 3) {
             throw new IllegalArgumentException("재시도 가능 횟수를 초과하였습니다.");
         }
     }
