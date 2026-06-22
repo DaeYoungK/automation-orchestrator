@@ -23,8 +23,8 @@ public class ExecutionFixture {
 
     public static Execution retryAndReadyExecution() {
         Execution execution = failedExecution();
-        execution.retry();
-        return execution;
+        Execution retryExecution = Execution.retryFrom(execution);
+        return retryExecution;
     }
 
     public static Execution successExecution() {

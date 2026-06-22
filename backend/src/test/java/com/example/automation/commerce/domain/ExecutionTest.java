@@ -108,21 +108,27 @@ class ExecutionTest {
     void Execution_의_재시도횟수가_3번을_초과하면_예외발생() {
         //given
         Execution execution = ExecutionFixture.readyExecution();
-        int maxRetry = 3;
 
         //when
-        for (int i = 0; i < maxRetry; i++) {
-            execution.start();
-            execution.fail("오류발생");
-            execution.retry();
-        }
+        execution.start();
+        execution.fail("오류발생");
+
+        Execution execution1 = Execution.retryFrom(execution);
+        execution1.start();
+        execution1.fail("오류발생");
+
+        Execution execution2 = Execution.retryFrom(execution1);
+        execution2.start();
+        execution2.fail("오류발생");
+
+        Execution execution3 = Execution.retryFrom(execution2);
+        execution3.start();
+        execution3.fail("오류발생");
 
         //then
-        assertThat(execution.getAttemptCount()).isEqualTo(3);
+        assertThat(execution3.getAttemptCount()).isEqualTo(3);
         assertThatThrownBy(() -> {
-            execution.start();
-            execution.fail("오류발생");
-            execution.retry();
+            Execution.retryFrom(execution3);
         }).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("재시도 가능 횟수를 초과하였습니다.");
     }
@@ -154,7 +160,7 @@ class ExecutionTest {
     @ParameterizedTest(name = "{0} 상태에서는 재시도 불가")
     @MethodSource("notRetryExecution")
     void Execution_의_상태가_FAILED_가_아닐경우_재시도하면_예외발생(String state, Execution execution) {
-        assertThatThrownBy(execution::retry)
+        assertThatThrownBy(() -> Execution.retryFrom(execution))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("실패 상태에서만 재시도할 수 있습니다.");
     }
