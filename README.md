@@ -77,13 +77,19 @@ Low Stock Product Query
 
 ## Automation Workflow
 
-Task
-→ Execution
-→ ExecutionLog
+Task Creation
+→ Task Approval
+→ Execution Creation
+→ Execution Start
+→ Execution Log Recording
 
-Examples:
+## Service Architecture
 
-- Low Stock Report
-- Purchase Review Request
-- Payment Failure Analysis
-- RPA Recovery Task
+TaskService
+→ Task lifecycle management
+
+ExecutionService
+→ Execution lifecycle management
+
+OrchestratorService
+→ Cross-service workflow orchestration

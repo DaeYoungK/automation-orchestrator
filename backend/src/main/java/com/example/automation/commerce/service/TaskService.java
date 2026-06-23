@@ -28,8 +28,6 @@ public class TaskService {
         Task task = taskRepository.findById(taskId).orElseThrow(() -> new IllegalArgumentException("해당하는 Task가 존재하지 않습니다."));
         task.approve();
 
-        executionService.createExecution(taskId, executionType);
-
-        return taskId;
+        return executionService.createExecution(taskId, executionType);
     }
 }
