@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
@@ -28,13 +30,17 @@ class OrchestratorServiceTest {
         Task task = taskRepository.findById(taskId).orElseThrow();
 
         //when
-        Long executionId = orchestratorService.approveAndStartTask(taskId, ExecutionType.AI);
-        Execution execution = executionRepository.findById(executionId).orElseThrow();
+        List<Long> executionIds = orchestratorService.approveAndStartTask(taskId);
 
         //then
+        assertThat(executionIds).hasSize(1);
+
+        Execution execution = executionRepository.findById(executionIds.get(0)).orElseThrow();
+
         assertThat(task.getTaskStatus()).isEqualTo(TaskStatus.APPROVED);
         assertThat(task.getExecutions()).hasSize(1);
         assertThat(execution.getExecutionStatus()).isEqualTo(ExecutionStatus.RUNNING);
         assertThat(execution.getExecutionLogs()).hasSize(2);
+
     }
 }

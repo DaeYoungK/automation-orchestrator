@@ -93,3 +93,15 @@ ExecutionService
 
 OrchestratorService
 → Cross-service workflow orchestration
+
+## Execution Resolution
+
+TaskType
+→ TaskExecutionResolver
+→ ExecutionType(s)
+
+Examples:
+
+- LOW_STOCK_REPORT → AI
+- PURCHASE_REQUEST_REVIEW → EMAIL
+- RPA_FAILURE_RECOVERY → RPA
