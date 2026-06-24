@@ -36,21 +36,16 @@ class TaskServiceTest {
     }
     
     @Test
-    void Task_를_승인하면_상태는_APPROVED_이고_Execution_이_생성되며_상태는_READY_이고_ExecutionLog_가_생성된다() {
+    void Task_를_승인하면_상태는_APPROVED_이다() {
         //given
         CreateTaskRequest createTaskRequest = createTaskRequest();
         Long taskId = taskService.createTask(createTaskRequest);
         Task task = taskRepository.findById(taskId).orElseThrow();
 
         //when
-        taskService.approveTask(taskId, ExecutionType.AI);
+        taskService.approveTask(taskId);
         
         //then
         assertThat(task.getTaskStatus()).isEqualTo(TaskStatus.APPROVED);
-        assertThat(task.getExecutions()).hasSize(1);
-        Execution execution = task.getExecutions().get(0);
-        assertThat(execution.getExecutionStatus()).isEqualTo(ExecutionStatus.READY);
-        assertThat(execution.getExecutionType()).isEqualTo(ExecutionType.AI);
-        assertThat(execution.getExecutionLogs()).hasSize(1);
     }
 }

@@ -1,6 +1,5 @@
 package com.example.automation.commerce.service;
 
-import com.example.automation.commerce.domain.ExecutionType;
 import com.example.automation.commerce.domain.Task;
 import com.example.automation.commerce.dto.CreateTaskRequest;
 import com.example.automation.commerce.repository.TaskRepository;
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class TaskService {
 
     private final TaskRepository taskRepository;
-    private final ExecutionService executionService;
 
     @Transactional
     public Long createTask(CreateTaskRequest request) {
@@ -24,10 +22,9 @@ public class TaskService {
     }
 
     @Transactional
-    public Long approveTask(Long taskId, ExecutionType executionType) {
+    public void approveTask(Long taskId) {
         Task task = taskRepository.findById(taskId).orElseThrow(() -> new IllegalArgumentException("해당하는 Task가 존재하지 않습니다."));
-        task.approve();
 
-        return executionService.createExecution(taskId, executionType);
+        task.approve();
     }
 }
