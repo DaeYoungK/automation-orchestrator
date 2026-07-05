@@ -105,3 +105,14 @@ Examples:
 - LOW_STOCK_REPORT → AI
 - PURCHASE_REQUEST_REVIEW → EMAIL
 - RPA_FAILURE_RECOVERY → RPA
+
+## Business Automation Flow
+
+Low Stock Query
+→ Task Creation
+→ Human Approval
+→ Execution
+→ Execution Log
+
+Human-in-the-Loop (HITL) is intentionally applied to business-critical tasks,
+allowing operators to review and approve tasks before execution.
