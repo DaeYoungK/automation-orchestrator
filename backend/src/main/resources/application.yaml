@@ -19,3 +19,12 @@ spring:
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
   type-aliases-package: com.example.automation.commerce.dto
+
+scheduler:
+  low-stock:
+    cron: "0 0 9 * * *"
+
+automation:
+  low-stock:
+    threshold: 5
+
