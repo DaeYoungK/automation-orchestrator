@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.automation.commerce.repository.TaskQueryMapper">
+    <select id="findTasks" resultType="com.example.automation.commerce.dto.TaskSummaryResponse">
+        SELECT
+               task_id as taskId,
+               task_type as taskType,
+               task_status as taskStatus,
+               created_at as createdAt
+        FROM task
+        <if test="taskStatus != null">
+            WHERE task_status = #{taskStatus}
+        </if>
+    </select>
+</mapper>
