@@ -23,7 +23,7 @@ class LowStockTaskSchedulerTest {
         );
 
         LowStockTaskScheduler scheduler =
-                new LowStockTaskScheduler(schedulerProperties, lowStockProperties, lowStockTaskService);
+                new LowStockTaskScheduler(lowStockProperties, lowStockTaskService);
 
         //when
         scheduler.createLowStockTask();
