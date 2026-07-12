@@ -22,9 +22,11 @@ public class TaskService {
     }
 
     @Transactional
-    public void approveTask(Long taskId) {
+    public Task approveTask(Long taskId) {
         Task task = taskRepository.findById(taskId).orElseThrow(() -> new IllegalArgumentException("해당하는 Task가 존재하지 않습니다."));
 
         task.approve();
+
+        return task;
     }
 }

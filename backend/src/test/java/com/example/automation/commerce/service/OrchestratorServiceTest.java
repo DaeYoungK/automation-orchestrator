@@ -23,14 +23,14 @@ class OrchestratorServiceTest {
     @Autowired TaskRepository taskRepository;
 
     @Test
-    void Task_를_승인하고_실행하면_Task_는_APPROVED_이고_Execution_은_RUNNING_이다() {
+    void Task_를_승인하면_Execution_은_생성되고_Task_는_APPROVED_이며_Execution_은_READY_이다() {
         //given
         CreateTaskRequest createTaskRequest = new CreateTaskRequest(TaskType.LOW_STOCK_REPORT, "재고 부족 리포트", "재고 부족 상품 분석");
         Long taskId = taskService.createTask(createTaskRequest);
         Task task = taskRepository.findById(taskId).orElseThrow();
 
         //when
-        List<Long> executionIds = orchestratorService.approveAndStartTask(taskId);
+        List<Long> executionIds = orchestratorService.approveAndCreateExecutions(taskId);
 
         //then
         assertThat(executionIds).hasSize(1);
@@ -39,8 +39,8 @@ class OrchestratorServiceTest {
 
         assertThat(task.getTaskStatus()).isEqualTo(TaskStatus.APPROVED);
         assertThat(task.getExecutions()).hasSize(1);
-        assertThat(execution.getExecutionStatus()).isEqualTo(ExecutionStatus.RUNNING);
-        assertThat(execution.getExecutionLogs()).hasSize(2);
+        assertThat(execution.getExecutionStatus()).isEqualTo(ExecutionStatus.READY);
+        assertThat(execution.getExecutionLogs()).hasSize(1);
 
     }
 }
