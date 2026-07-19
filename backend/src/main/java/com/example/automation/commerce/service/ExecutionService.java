@@ -16,7 +16,7 @@ public class ExecutionService {
     private final ExecutionRepository executionRepository;
     private final TaskRepository taskRepository;
 
-    private Execution findExecution(Long executionId) {
+    public Execution findExecution(Long executionId) {
         return executionRepository.findById(executionId)
                 .orElseThrow(() -> new IllegalArgumentException("Execution 이 존재하지 않습니다."));
     }
