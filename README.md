@@ -47,6 +47,7 @@ This project uses AI as a development assistant for:
 - Service orchestration
 - Transactional consistency
 - Transaction boundary management
+- Execution lifecycle separation
 - JPA for state management
 - Preparing MyBatis integration for future query optimization
 
@@ -77,11 +78,15 @@ Low Stock Product Query
 
 ## Automation Workflow
 
+```text
 Task Creation
 → Task Approval
-→ Execution Creation
-→ Execution Start
+→ Execution Creation (READY)
+→ Execution Runner
+→ Executor Selection
+→ Execution
 → Execution Log Recording
+```
 
 ## Service Architecture
 
@@ -93,6 +98,9 @@ ExecutionService
 
 OrchestratorService
 → Cross-service workflow orchestration
+
+ExecutionRunner
+→ Execution orchestration
 
 ## Execution Resolution
 
@@ -108,11 +116,29 @@ Examples:
 
 ## Business Automation Flow
 
+```text
 Low Stock Query
 → Task Creation
 → Human Approval
+→ Execution Creation (READY)
+→ Execution Runner
 → Execution
 → Execution Log
+```
 
 Human-in-the-Loop (HITL) is intentionally applied to business-critical tasks,
 allowing operators to review and approve tasks before execution.
+
+## Execution Architecture
+
+```text
+Execution (READY)
+        ↓
+ExecutionRunner
+        ↓
+ExecutionExecutorFactory
+        ↓
+ExecutionExecutor
+        ↓
+AI / API / Email / RPA
+```
