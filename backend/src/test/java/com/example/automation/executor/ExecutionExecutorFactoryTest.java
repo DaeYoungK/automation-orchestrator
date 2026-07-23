@@ -1,7 +1,7 @@
 package com.example.automation.executor;
 
 import com.example.automation.commerce.domain.ExecutionType;
-import com.example.automation.executor.impl.AiExecutionExecutor;
+import com.example.automation.executor.ai.AiExecutionExecutor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
