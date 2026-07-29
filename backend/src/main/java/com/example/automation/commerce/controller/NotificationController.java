@@ -4,6 +4,7 @@ import com.example.automation.commerce.domain.Notification;
 import com.example.automation.commerce.dto.NotificationRequest;
 import com.example.automation.commerce.dto.NotificationResponse;
 import com.example.automation.commerce.service.NotificationService;
+import com.example.automation.executor.api.url.ApiEndpoints;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/notifications")
+@RequestMapping(ApiEndpoints.NOTIFICATIONS)
 public class NotificationController {
 
     private final NotificationService notificationService;

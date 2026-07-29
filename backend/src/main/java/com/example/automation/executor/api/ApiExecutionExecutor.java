@@ -3,17 +3,16 @@ package com.example.automation.executor.api;
 import com.example.automation.commerce.domain.ExecutionType;
 import com.example.automation.executor.ExecutionContext;
 import com.example.automation.executor.ExecutionExecutor;
+import com.example.automation.executor.api.resolver.ApiExecutionRequestResolver;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
 public class ApiExecutionExecutor implements ExecutionExecutor {
 
     private final ApiExecutionClient apiExecutionClient;
+    private final ApiExecutionRequestResolver resolver;
 
     @Override
     public ExecutionType getExecutionType() {
@@ -23,7 +22,7 @@ public class ApiExecutionExecutor implements ExecutionExecutor {
     @Override
     public void execute(ExecutionContext executionContext) {
 
-        ApiExecutionRequest request = new ApiExecutionRequest("urlTest", HttpMethod.POST, Map.of("test", "test"), null);
+        ApiExecutionRequest request = resolver.resolve(executionContext);
         apiExecutionClient.execute(request);
     }
 }
