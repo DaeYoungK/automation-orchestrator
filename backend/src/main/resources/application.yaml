@@ -28,3 +28,6 @@ automation:
   low-stock:
     threshold: 5
 
+execution:
+  api:
+    base-url: http://localhost:8080

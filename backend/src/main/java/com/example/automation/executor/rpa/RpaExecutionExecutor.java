@@ -1,4 +1,4 @@
-package com.example.automation.executor.impl;
+package com.example.automation.executor.rpa;
 
 import com.example.automation.commerce.domain.ExecutionType;
 import com.example.automation.executor.ExecutionContext;
