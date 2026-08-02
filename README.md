@@ -71,10 +71,13 @@ Product Creation
 
 ## Future Automation Flow
 
+```text
 Low Stock Product Query
-→ AI Analysis
 → Task Creation
-→ Approval Workflow
+→ Human Approval
+→ Execution Creation
+→ API / AI / Email / RPA Execution
+```
 
 ## Automation Workflow
 
@@ -140,5 +143,24 @@ ExecutionExecutorFactory
         ↓
 ExecutionExecutor
         ↓
-AI / API / Email / RPA
+ApiExecutionExecutor
+        ↓
+ApiExecutionRequestResolver
+        ↓
+ApiExecutionRequestProvider
+        ↓
+RestApiExecutionClient
 ```
+
+## Supported Execution Types
+
+Currently implemented:
+
+- API ✅
+
+Planned:
+
+- AI
+- Email
+- Slack
+- RPA
