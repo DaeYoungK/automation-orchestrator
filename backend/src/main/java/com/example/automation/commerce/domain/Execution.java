@@ -14,6 +14,8 @@ import java.util.List;
 @Getter
 public class Execution extends BaseEntity {
 
+    private static final int MAX_RETRY_COUNT = 3;
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "execution_id")
     private Long id;
@@ -94,13 +96,26 @@ public class Execution extends BaseEntity {
     }
 
     private static void validateRetryable(Execution failedExecution) {
-        if (failedExecution.executionStatus != ExecutionStatus.FAILED) {
+        if (!failedExecution.isFailed()) {
             throw new IllegalArgumentException("실패 상태에서만 재시도할 수 있습니다.");
         }
-        if (failedExecution.attemptCount >= 3) {
+        if (!failedExecution.hasRetryAttemptsRemaining()) {
             throw new IllegalArgumentException("재시도 가능 횟수를 초과하였습니다.");
         }
     }
+
+    private boolean isFailed() {
+        return executionStatus == ExecutionStatus.FAILED;
+    }
+
+    private boolean hasRetryAttemptsRemaining() {
+        return attemptCount < MAX_RETRY_COUNT;
+    }
+
+    public boolean isRetryable() {
+        return isFailed() && hasRetryAttemptsRemaining();
+    }
+
 
     public void cancel() {
         if (this.executionStatus == ExecutionStatus.SUCCESS || this.executionStatus == ExecutionStatus.FAILED) {
