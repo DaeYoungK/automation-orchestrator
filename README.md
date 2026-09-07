@@ -85,9 +85,11 @@ Low Stock Product Query
 Task Creation
 → Task Approval
 → Execution Creation (READY)
-→ Execution Runner
+→ Execution Run API
+→ ExecutionRunner
 → Executor Selection
 → Execution
+→ SUCCESS / FAILED
 → Execution Log Recording
 ```
 
@@ -164,3 +166,19 @@ Planned:
 - Email
 - Slack
 - RPA
+
+## Execution Run API
+
+```text
+POST /api/executions/{executionId}/run
+        ↓
+ExecutionRunService
+        ↓
+ExecutionRunner
+        ↓
+ExecutionExecutorFactory
+        ↓
+ExecutionExecutor
+        ↓
+SUCCESS / FAILED
+```
