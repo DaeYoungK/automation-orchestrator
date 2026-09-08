@@ -1,9 +1,9 @@
 package com.example.automation.executor.api.provider;
 
-import com.example.automation.commerce.config.ApiExecutionProperties;
-import com.example.automation.commerce.domain.Task;
-import com.example.automation.commerce.domain.TaskType;
-import com.example.automation.commerce.dto.NotificationRequest;
+import com.example.automation.executor.api.config.ApiExecutionProperties;
+import com.example.automation.task.domain.Task;
+import com.example.automation.task.domain.TaskType;
+import com.example.automation.notification.dto.NotificationRequest;
 import com.example.automation.executor.api.ApiExecutionRequest;
 import com.example.automation.executor.api.url.ApiEndpoints;
 import lombok.RequiredArgsConstructor;

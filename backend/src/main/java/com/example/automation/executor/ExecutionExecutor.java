@@ -1,6 +1,6 @@
 package com.example.automation.executor;
 
-import com.example.automation.commerce.domain.ExecutionType;
+import com.example.automation.execution.domain.ExecutionType;
 
 public interface ExecutionExecutor {
 

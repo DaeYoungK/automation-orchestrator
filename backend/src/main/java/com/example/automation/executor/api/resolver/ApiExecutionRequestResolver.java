@@ -1,9 +1,9 @@
 package com.example.automation.executor.api.resolver;
 
-import com.example.automation.commerce.domain.Execution;
-import com.example.automation.commerce.domain.Task;
-import com.example.automation.commerce.domain.TaskType;
-import com.example.automation.commerce.service.ExecutionService;
+import com.example.automation.execution.domain.Execution;
+import com.example.automation.task.domain.Task;
+import com.example.automation.task.domain.TaskType;
+import com.example.automation.execution.application.ExecutionService;
 import com.example.automation.executor.ExecutionContext;
 import com.example.automation.executor.api.ApiExecutionRequest;
 import com.example.automation.executor.api.provider.ApiExecutionRequestProvider;
