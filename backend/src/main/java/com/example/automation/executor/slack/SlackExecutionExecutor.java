@@ -1,6 +1,6 @@
 package com.example.automation.executor.slack;
 
-import com.example.automation.commerce.domain.ExecutionType;
+import com.example.automation.execution.domain.ExecutionType;
 import com.example.automation.executor.ExecutionContext;
 import com.example.automation.executor.ExecutionExecutor;
 import org.springframework.stereotype.Component;

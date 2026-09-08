@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.automation.commerce.repository.OrderQueryMapper">
+<mapper namespace="com.example.automation.commerce.order.repository.OrderQueryMapper">
 
-    <select id="findOrderSummaries" resultType="com.example.automation.commerce.dto.OrderSummaryResponse">
+    <select id="findOrderSummaries" resultType="com.example.automation.commerce.order.dto.OrderSummaryResponse">
         SELECT
                o.id AS orderId,
                o.address AS address,

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.automation.commerce.inventory.repository.InventoryQueryMapper">
+
+    <select id="findLowStockProducts" resultType="com.example.automation.task.dto.LowStockProductResponse">
+        SELECT
+            p.product_id AS productId,
+            i.inventory_id AS inventoryId,
+            p.name AS productName,
+            i.available_quantity AS availableQuantity,
+            p.product_status AS productStatus
+        FROM inventory AS i
+        INNER JOIN product AS p
+            ON i.product_id = p.product_id
+        WHERE i.available_quantity <![CDATA[ <= ]]> #{threshold}
+    </select>
+
+</mapper>

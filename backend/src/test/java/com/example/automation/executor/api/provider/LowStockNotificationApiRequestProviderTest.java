@@ -1,8 +1,8 @@
 package com.example.automation.executor.api.provider;
 
-import com.example.automation.commerce.config.ApiExecutionProperties;
-import com.example.automation.commerce.domain.Task;
-import com.example.automation.commerce.dto.NotificationRequest;
+import com.example.automation.executor.api.config.ApiExecutionProperties;
+import com.example.automation.task.domain.Task;
+import com.example.automation.notification.dto.NotificationRequest;
 import com.example.automation.executor.api.ApiExecutionRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
