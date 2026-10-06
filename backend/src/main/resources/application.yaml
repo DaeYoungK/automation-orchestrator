@@ -31,3 +31,6 @@ automation:
 execution:
   api:
     base-url: http://localhost:8080
+
+file:
+  base-path: C:/Users/kim/Desktop/test/files
