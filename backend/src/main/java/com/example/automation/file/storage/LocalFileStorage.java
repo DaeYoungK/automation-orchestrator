@@ -5,6 +5,7 @@ import com.example.automation.file.exception.FileStorageException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -35,11 +36,29 @@ public class LocalFileStorage implements FileStorage {
 
     @Override
     public InputStream load(String storageKey) {
-        return null;
+        try {
+            String basePath = fileBasePathProperties.basePath();
+
+            Path resolvePath = Paths.get(basePath).resolve(storageKey);
+
+            if (!Files.exists(resolvePath)) {
+                throw new FileStorageException("파일을 가져올 수 없습니다.");
+            }
+            return Files.newInputStream(resolvePath);
+        } catch (IOException e) {
+            throw new FileStorageException("파일을 가져올 수 없습니다.", e);
+        }
     }
 
     @Override
     public void delete(String storageKey) {
+        try {
+            String basePath = fileBasePathProperties.basePath();
+            Path resolvePath = Paths.get(basePath).resolve(storageKey);
 
+            Files.deleteIfExists(resolvePath);
+        } catch (IOException e) {
+            throw new FileStorageException("파일을 삭제할 수 없습니다.", e);
+        }
     }
 }

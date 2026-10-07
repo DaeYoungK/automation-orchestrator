@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 class LocalFileStorageTest {
 
@@ -59,5 +60,58 @@ class LocalFileStorageTest {
         //then
         assertThatThrownBy(() -> localFileStorage.store(storageKey, second, secondData.length))
                 .isInstanceOf(FileStorageException.class);
+    }
+
+    @Test
+    void 저장된_파일을_load_하면_원본_내용이_나온다() throws IOException {
+        //given
+        String storageKey = "test-key";
+        byte[] data = "inputStream".getBytes();
+
+        try (InputStream inputStream = new ByteArrayInputStream(data)){
+            localFileStorage.store(storageKey, inputStream, data.length);
+        }
+
+        //when && then
+        try(InputStream loadFile = localFileStorage.load(storageKey)) {
+            assertThat(loadFile.readAllBytes()).isEqualTo(data);
+        }
+    }
+
+    @Test
+    void 존재하지_않는_storageKey_를_load_하면_FileStorageException_이_발생한다(){
+        //given
+        String notExistStorageKey = "no-exist-key";
+
+        //when && then
+        assertThatThrownBy(() -> localFileStorage.load(notExistStorageKey))
+                .isInstanceOf(FileStorageException.class);
+    }
+
+    @Test
+    void 저장된_파일을_delete_하면_실제_파일이_삭제된다() throws IOException {
+        //given
+        String storageKey = "test-key";
+        byte[] data = "inputStream".getBytes();
+
+        try (InputStream inputStream = new ByteArrayInputStream(data)){
+            localFileStorage.store(storageKey, inputStream, data.length);
+        }
+
+        //when
+        assertThat(Files.exists(tempDir.resolve(storageKey))).isTrue();
+        localFileStorage.delete(storageKey);
+
+        //then
+        assertThat(Files.exists(tempDir.resolve(storageKey))).isFalse();
+    }
+
+    @Test
+    void 존재하지_않는_파일을_delete_해도_예외가_발생하지_않는다() {
+        //given
+        String storageKey = "test-key";
+
+        //when && then
+        assertDoesNotThrow(() -> localFileStorage.delete(storageKey));
     }
 }
