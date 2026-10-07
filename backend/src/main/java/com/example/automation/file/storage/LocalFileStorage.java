@@ -5,7 +5,6 @@ import com.example.automation.file.exception.FileStorageException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -18,15 +17,28 @@ public class LocalFileStorage implements FileStorage {
 
     private final FileBasePathProperties fileBasePathProperties;
 
+    private Path getBasePath() {
+        String basePath = fileBasePathProperties.basePath();
+
+        return Paths.get(basePath).toAbsolutePath().normalize();
+    }
+
+    private Path resolvePath(String storageKey) {
+        Path basePath = getBasePath();
+        Path resolvePath = basePath.resolve(storageKey).normalize();
+
+        if (!resolvePath.startsWith(basePath)) {
+            throw new IllegalArgumentException("파일 저장 경로가 올바르지 않습니다.");
+        }
+        return resolvePath;
+    }
+
     @Override
     public void store(String storageKey, InputStream inputStream, long contentLength) {
         try {
-            String basePath = fileBasePathProperties.basePath();
-            Path path = Paths.get(basePath);
+            Path resolvePath = resolvePath(storageKey);
 
-            Files.createDirectories(path);
-
-            Path resolvePath = path.resolve(storageKey);
+            Files.createDirectories(resolvePath.getParent());
 
             Files.copy(inputStream, resolvePath);
         } catch (IOException e) {
@@ -37,9 +49,7 @@ public class LocalFileStorage implements FileStorage {
     @Override
     public InputStream load(String storageKey) {
         try {
-            String basePath = fileBasePathProperties.basePath();
-
-            Path resolvePath = Paths.get(basePath).resolve(storageKey);
+            Path resolvePath = resolvePath(storageKey);
 
             if (!Files.exists(resolvePath)) {
                 throw new FileStorageException("파일을 가져올 수 없습니다.");
@@ -53,8 +63,7 @@ public class LocalFileStorage implements FileStorage {
     @Override
     public void delete(String storageKey) {
         try {
-            String basePath = fileBasePathProperties.basePath();
-            Path resolvePath = Paths.get(basePath).resolve(storageKey);
+            Path resolvePath = resolvePath(storageKey);
 
             Files.deleteIfExists(resolvePath);
         } catch (IOException e) {
