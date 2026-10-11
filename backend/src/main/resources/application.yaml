@@ -9,7 +9,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
@@ -31,3 +31,10 @@ automation:
 execution:
   api:
     base-url: http://localhost:8080
+
+file:
+  base-path: C:/Users/kim/Desktop/test/files
+
+#logging:
+#  level:
+#    org.flywaydb: DEBUG

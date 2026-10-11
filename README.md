@@ -182,3 +182,34 @@ ExecutionExecutor
         ↓
 SUCCESS / FAILED
 ```
+
+## File Storage Architecture
+
+```text
+StoredFile
+    ↓
+StoredFileRepository (JPA)
+    ↓
+File Metadata (MySQL)
+
+FileStorage (Interface)
+    ↓
+LocalFileStorage
+    ↓
+Local File System
+```
+
+File metadata and physical file storage are managed separately.
+
+The storage layer uses `InputStream` to remain independent of HTTP-specific upload mechanisms.
+
+Local file storage is currently implemented, with support for additional storage providers such as S3 planned for future development.
+
+## Database Migration
+
+Database schema changes are managed through Flyway migrations.
+
+- Flyway: Schema creation and versioned migrations
+- Hibernate (`ddl-auto: validate`): Entity and schema validation
+- Initial migration: `V1__initial_schema.sql`
+```
