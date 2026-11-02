@@ -186,24 +186,39 @@ SUCCESS / FAILED
 ## File Storage Architecture
 
 ```text
-StoredFile
-    ↓
-StoredFileRepository (JPA)
-    ↓
-File Metadata (MySQL)
-
-FileStorage (Interface)
-    ↓
-LocalFileStorage
-    ↓
-Local File System
+FileService
+    ├── FileStorage
+    │     └── LocalFileStorage
+    │             └── Local File System
+    │
+    └── StoredFilePersistenceService
+              └── StoredFileRepository (JPA)
+                        └── MySQL
 ```
 
 File metadata and physical file storage are managed separately.
 
+`FileService` coordinates file storage and metadata persistence, while `StoredFilePersistenceService` manages the database transaction boundary.
+
 The storage layer uses `InputStream` to remain independent of HTTP-specific upload mechanisms.
 
-Local file storage is currently implemented, with support for additional storage providers such as S3 planned for future development.
+## File Storage Compensation
+
+```text
+File Storage
+    ↓
+Metadata Persistence
+    ↓
+DB Commit
+    ├── Success → Return StoredFile ID
+    └── Failure → Delete Stored File
+```
+
+When file storage or metadata persistence fails, the application attempts to clean up the physical file.
+
+If cleanup also fails, the original exception is preserved and the cleanup exception is recorded as a suppressed exception.
+
+This compensation mechanism handles detected application failures but does not guarantee recovery from process termination or infrastructure failures.
 
 ## Database Migration
 
