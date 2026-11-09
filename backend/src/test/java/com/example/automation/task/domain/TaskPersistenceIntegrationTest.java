@@ -1,5 +1,7 @@
 package com.example.automation.task.domain;
 
+import com.example.automation.file.domain.StoredFile;
+import com.example.automation.file.repository.StoredFileRepository;
 import com.example.automation.task.repository.TaskRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -14,10 +16,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
-public class TaskPersistenceIntegrationTest {
+class TaskPersistenceIntegrationTest {
 
     @Autowired
     private TaskRepository taskRepository;
+
+    @Autowired
+    private StoredFileRepository storedFileRepository;
 
     @PersistenceContext
     private EntityManager em;
@@ -25,8 +30,14 @@ public class TaskPersistenceIntegrationTest {
     @Test
     void Task_를_저장하면_TaskInput_도_함께_저장된다() {
         //given
+        String originalFileName = "테스트파일.xlsx";
+        Long sizeBytes = 100L;
+        String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        StoredFile storedFile = StoredFile.create(originalFileName, sizeBytes, contentType);
+        StoredFile savedStoredFile = storedFileRepository.save(storedFile);
+
         Task task = new Task(TaskType.LOW_STOCK_REPORT, "재고부족 리포트", "재고부족 리포트를 작성한다.");
-        TaskInput taskInput = TaskInput.createFile("key", 1L);
+        TaskInput taskInput = TaskInput.createFile("key", savedStoredFile.getId());
         task.addTaskInput(taskInput);
 
         //when
@@ -41,7 +52,7 @@ public class TaskPersistenceIntegrationTest {
 
         TaskInput foundInput = foundTask.getTaskInputs().get(0);
         assertThat(foundInput.getKey()).isEqualTo("key");
-        assertThat(foundInput.getStoredFileId()).isEqualTo(1L);
+        assertThat(foundInput.getStoredFileId()).isEqualTo(savedStoredFile.getId());
         assertThat(foundInput.getTaskInputType()).isEqualTo(TaskInputType.FILE);
     }
 
