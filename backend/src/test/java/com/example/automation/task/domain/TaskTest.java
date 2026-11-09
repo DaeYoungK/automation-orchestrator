@@ -147,4 +147,45 @@ class TaskTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("작업을 취소할 수 없습니다.");
     }
+    
+    @Test
+    void TaskInput_을_추가하면_Task_의_입력목록에_추가된다() {
+        //given
+        Task task = new Task(TaskType.LOW_STOCK_REPORT, "재고부족 리포트", "재고부족 리포트를 작성한다.");
+        TaskInput taskInput = TaskInput.createFile("key", 1L);
+
+        //when
+        task.addTaskInput(taskInput);
+
+        //then
+        assertThat(task.getTaskInputs()).contains(taskInput);
+    }
+
+    @Test
+    void TaskInput_을_추가하면_TaskInput_에도_Task_가_연결된다() {
+        //given
+        Task task = new Task(TaskType.LOW_STOCK_REPORT, "재고부족 리포트", "재고부족 리포트를 작성한다.");
+        TaskInput taskInput = TaskInput.createFile("key", 1L);
+
+        //when
+        task.addTaskInput(taskInput);
+
+        //then
+        assertThat(taskInput.getTask()).isSameAs(task);
+    }
+
+    @Test
+    void TaskInput_의_key_가_중복되면_예외가_발생한다() {
+        //given
+        Task task = new Task(TaskType.LOW_STOCK_REPORT, "재고부족 리포트", "재고부족 리포트를 작성한다.");
+        TaskInput taskInput1 = TaskInput.createFile("key", 1L);
+        TaskInput taskInput2 = TaskInput.createFile("key", 2L);
+        task.addTaskInput(taskInput1);
+
+        //when && then
+        assertThatThrownBy(() -> task.addTaskInput(taskInput2))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("TaskInput key는 중복될 수 없습니다.");
+
+    }
 }
