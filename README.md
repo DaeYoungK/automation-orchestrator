@@ -202,6 +202,32 @@ File metadata and physical file storage are managed separately.
 
 The storage layer uses `InputStream` to remain independent of HTTP-specific upload mechanisms.
 
+## Task Input Architecture
+
+```text
+Task (Aggregate Root)
+    ↓
+TaskInput (FILE)
+    ↓
+storedFileId
+    ↓
+StoredFile (Separate Aggregate)
+    ↓
+FileStorage
+```
+
+`TaskInput` belongs to the Task aggregate and is persisted through the Task lifecycle.
+
+File metadata and physical storage are managed independently by the StoredFile aggregate and FileStorage abstraction.
+
+TaskInput references StoredFile by ID without a direct JPA relationship.
+
+Currently supported input types:
+
+- FILE
+
+TaskInput keys are unique within each Task, enforced by both domain validation and a database unique constraint.
+
 ## File Storage Compensation
 
 ```text

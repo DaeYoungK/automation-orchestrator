@@ -28,6 +28,9 @@ public class Task extends BaseEntity {
     @OneToMany(mappedBy = "task",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Execution> executions = new ArrayList<>();
 
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TaskInput> taskInputs = new ArrayList<>();
+
     private String title;
     private String description;
 
@@ -37,6 +40,12 @@ public class Task extends BaseEntity {
     public void addExecution(Execution execution) {
         this.executions.add(execution);
         execution.assignTask(this);
+    }
+
+    public void addTaskInput(TaskInput taskInput) {
+        validateKeyDuplication(taskInput.getKey());
+        this.taskInputs.add(taskInput);
+        taskInput.assignTask(this);
     }
 
     protected Task(TaskType taskType, String title, String description) {
@@ -100,4 +109,14 @@ public class Task extends BaseEntity {
             throw new IllegalArgumentException("작업을 취소할 수 없습니다.");
         }
     }
+
+    private void validateKeyDuplication(String key) {
+        boolean duplicated = taskInputs.stream()
+                .anyMatch(taskInput -> taskInput.getKey().equals(key));
+
+        if (duplicated) {
+            throw new IllegalStateException("TaskInput key는 중복될 수 없습니다.");
+        }
+    }
+
 }
